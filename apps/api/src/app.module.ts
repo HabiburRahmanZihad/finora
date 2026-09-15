@@ -10,6 +10,10 @@ import { CategoriesModule } from "./categories/categories.module.js";
 import { FinancialAccountsModule } from "./financial-accounts/financial-accounts.module.js";
 import { TagsModule } from "./tags/tags.module.js";
 import { TransactionsModule } from "./transactions/transactions.module.js";
+import { DashboardModule } from "./dashboard/dashboard.module.js";
+import { BudgetsModule } from "./budgets/budgets.module.js";
+import { SavingGoalsModule } from "./saving-goals/saving-goals.module.js";
+import { ReportsModule } from "./reports/reports.module.js";
 
 @Module({
   imports: [
@@ -24,6 +28,10 @@ import { TransactionsModule } from "./transactions/transactions.module.js";
     FinancialAccountsModule,
     TagsModule,
     TransactionsModule,
+    DashboardModule,
+    BudgetsModule,
+    SavingGoalsModule,
+    ReportsModule,
   ],
   controllers: [HealthController],
   providers: [

@@ -5,3 +5,7 @@ export * from "./financial-account.js";
 export * from "./category.js";
 export * from "./transaction.js";
 export * from "./tag.js";
+export * from "./dashboard.js";
+export * from "./budget.js";
+export * from "./saving-goal.js";
+export * from "./reports.js";

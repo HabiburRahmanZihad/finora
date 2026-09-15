@@ -37,12 +37,25 @@ function toDateTimeLocal(date: Date) {
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
 }
 
-export function TransactionFormDialog() {
+export function TransactionFormDialog({
+  defaultType = TransactionType.EXPENSE,
+  trigger,
+}: {
+  defaultType?: typeof TransactionType.EXPENSE | typeof TransactionType.INCOME;
+  trigger?: React.ReactNode;
+}) {
   const [open, setOpen] = useState(false);
   const createTransaction = useCreateTransaction();
   const { data: accounts } = useAccounts();
   const { data: expenseCategories } = useCategories(CategoryType.EXPENSE);
   const { data: incomeCategories } = useCategories(CategoryType.INCOME);
+
+  const defaultValues = {
+    type: defaultType,
+    amount: "",
+    date: new Date(),
+    tagIds: [],
+  } as unknown as CreateTransactionInput;
 
   const {
     register,
@@ -54,12 +67,7 @@ export function TransactionFormDialog() {
     formState: { errors },
   } = useForm<CreateTransactionInput>({
     resolver: zodResolver(createTransactionSchema),
-    defaultValues: {
-      type: TransactionType.EXPENSE,
-      amount: "",
-      date: new Date(),
-      tagIds: [],
-    } as unknown as CreateTransactionInput,
+    defaultValues,
   });
 
   const type = watch("type");
@@ -69,9 +77,7 @@ export function TransactionFormDialog() {
     try {
       await createTransaction.mutateAsync(values);
       toast.success("Transaction added");
-      reset(
-        { type: TransactionType.EXPENSE, amount: "", date: new Date(), tagIds: [] } as unknown as CreateTransactionInput,
-      );
+      reset(defaultValues);
       setOpen(false);
     } catch {
       toast.error("Could not save transaction");
@@ -79,11 +85,19 @@ export function TransactionFormDialog() {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={open}
+      onOpenChange={(next) => {
+        setOpen(next);
+        if (next) reset(defaultValues);
+      }}
+    >
       <DialogTrigger asChild>
-        <Button>
-          <Plus /> Add Transaction
-        </Button>
+        {trigger ?? (
+          <Button>
+            <Plus /> Add Transaction
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
