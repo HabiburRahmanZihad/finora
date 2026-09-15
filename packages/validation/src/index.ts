@@ -9,3 +9,7 @@ export * from "./dashboard.js";
 export * from "./budget.js";
 export * from "./saving-goal.js";
 export * from "./reports.js";
+export * from "./what-if.js";
+export * from "./subscription.js";
+export * from "./recurring-transaction.js";
+export * from "./export.js";

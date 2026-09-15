@@ -14,6 +14,15 @@ import { DashboardModule } from "./dashboard/dashboard.module.js";
 import { BudgetsModule } from "./budgets/budgets.module.js";
 import { SavingGoalsModule } from "./saving-goals/saving-goals.module.js";
 import { ReportsModule } from "./reports/reports.module.js";
+import { AnalyticsModule } from "./analytics/analytics.module.js";
+import { InsightsModule } from "./insights/insights.module.js";
+import { ForecastModule } from "./forecast/forecast.module.js";
+import { HealthScoreModule } from "./health-score/health-score.module.js";
+import { SubscriptionsModule } from "./subscriptions/subscriptions.module.js";
+import { RecurringTransactionsModule } from "./recurring-transactions/recurring-transactions.module.js";
+import { NotificationsModule } from "./notifications/notifications.module.js";
+import { ExportModule } from "./export/export.module.js";
+import { ReceiptsModule } from "./receipts/receipts.module.js";
 
 @Module({
   imports: [
@@ -32,6 +41,15 @@ import { ReportsModule } from "./reports/reports.module.js";
     BudgetsModule,
     SavingGoalsModule,
     ReportsModule,
+    AnalyticsModule,
+    InsightsModule,
+    ForecastModule,
+    HealthScoreModule,
+    SubscriptionsModule,
+    RecurringTransactionsModule,
+    NotificationsModule,
+    ExportModule,
+    ReceiptsModule,
   ],
   controllers: [HealthController],
   providers: [

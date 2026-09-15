@@ -1,5 +1,6 @@
 import { MobileNav } from "./mobile-nav";
 import { UserMenu } from "./user-menu";
+import { NotificationBell } from "./notification-bell";
 
 export function Topbar({ name, email }: { name: string; email: string }) {
   return (
@@ -8,7 +9,10 @@ export function Topbar({ name, email }: { name: string; email: string }) {
         <MobileNav />
         <span className="text-lg font-semibold text-primary md:hidden">Finora</span>
       </div>
-      <UserMenu name={name} email={email} />
+      <div className="flex items-center gap-2">
+        <NotificationBell />
+        <UserMenu name={name} email={email} />
+      </div>
     </header>
   );
 }

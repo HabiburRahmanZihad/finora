@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Lightbulb, HeartPulse, ArrowDownLeft, ArrowUpRight } from "lucide-react";
+import { Lightbulb, ArrowDownLeft, ArrowUpRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,41 +17,16 @@ import { ExpenseByCategoryChart } from "@/features/dashboard/expense-by-category
 import { MonthlyTrendChart } from "@/features/dashboard/monthly-trend-chart";
 import { BudgetStatusWidget } from "@/features/dashboard/budget-status-widget";
 import { SavingGoalsWidget } from "@/features/dashboard/saving-goals-widget";
+import { HealthScoreCard } from "@/features/dashboard/health-score-card";
+import { useHealthScore } from "@/features/dashboard/use-health-score";
 import { useTransactions } from "@/features/transactions/use-transactions";
 import { TransactionList } from "@/features/transactions/transaction-list";
 import { TransactionFormDialog } from "@/features/transactions/transaction-form-dialog";
 import { TransactionType } from "@finora/types";
 import { useBudgets } from "@/features/budgets/use-budgets";
 import { useSavingGoals } from "@/features/goals/use-saving-goals";
-
-function PlaceholderCard({
-  icon: Icon,
-  title,
-  description,
-  href,
-}: {
-  icon: typeof Lightbulb;
-  title: string;
-  description: string;
-  href: string;
-}) {
-  return (
-    <Card>
-      <CardContent className="flex items-start gap-3 p-5">
-        <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-secondary text-secondary-foreground">
-          <Icon className="size-4" />
-        </div>
-        <div className="min-w-0 flex-1">
-          <p className="text-sm font-medium text-foreground">{title}</p>
-          <p className="mt-0.5 text-xs text-muted-foreground">{description}</p>
-        </div>
-        <Button variant="ghost" size="sm" asChild>
-          <Link href={href}>View</Link>
-        </Button>
-      </CardContent>
-    </Card>
-  );
-}
+import { useInsights } from "@/features/insights/use-insights";
+import { InsightList } from "@/features/insights/insight-list";
 
 export default function DashboardPage() {
   const [preset, setPreset] = useState<TimeFilterPreset>("this_month");
@@ -59,9 +34,14 @@ export default function DashboardPage() {
   const { data: summary, isLoading: summaryLoading } = useDashboardSummary(preset);
   const { data: expenseByCategory } = useExpenseByCategory(preset);
   const { data: monthlyTrend } = useMonthlyTrend(6);
-  const { data: recentTransactions } = useTransactions({ pageSize: 5, sort: "newest" });
-  const { data: budgets } = useBudgets();
-  const { data: goals } = useSavingGoals();
+  const { data: recentTransactions, isLoading: transactionsLoading } = useTransactions({
+    pageSize: 5,
+    sort: "newest",
+  });
+  const { data: budgets, isLoading: budgetsLoading } = useBudgets();
+  const { data: goals, isLoading: goalsLoading } = useSavingGoals();
+  const { data: health } = useHealthScore();
+  const { data: insights, isLoading: insightsLoading } = useInsights();
 
   return (
     <div className="flex flex-col gap-6">
@@ -99,18 +79,25 @@ export default function DashboardPage() {
       )}
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <PlaceholderCard
-          icon={HeartPulse}
-          title="Financial Health"
-          description="Coming in a later phase — a 0–100 score from your habits."
-          href="/settings"
-        />
-        <PlaceholderCard
-          icon={Lightbulb}
-          title="Financial Insights"
-          description="Rule-based insights ('Food spending up 25%') land here soon."
-          href="/insights"
-        />
+        <HealthScoreCard health={health} />
+        <Card>
+          <CardContent className="flex flex-col gap-3 p-5">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Lightbulb className="size-4 text-muted-foreground" />
+                <p className="text-sm font-medium text-foreground">Financial Insights</p>
+              </div>
+              <Button variant="ghost" size="sm" asChild>
+                <Link href="/insights">View all</Link>
+              </Button>
+            </div>
+            {insightsLoading ? (
+              <p className="text-xs text-muted-foreground">Loading…</p>
+            ) : (
+              <InsightList insights={insights ?? []} limit={3} />
+            )}
+          </CardContent>
+        </Card>
       </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
@@ -133,8 +120,8 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <BudgetStatusWidget budgets={budgets ?? []} />
-        <SavingGoalsWidget goals={goals ?? []} />
+        <BudgetStatusWidget budgets={budgets ?? []} isLoading={budgetsLoading} />
+        <SavingGoalsWidget goals={goals ?? []} isLoading={goalsLoading} />
       </div>
 
       <Card>
@@ -145,7 +132,11 @@ export default function DashboardPage() {
           </Button>
         </CardHeader>
         <CardContent>
-          <TransactionList transactions={recentTransactions?.items ?? []} showDelete={false} />
+          {transactionsLoading ? (
+            <p className="py-8 text-center text-sm text-muted-foreground">Loading transactions…</p>
+          ) : (
+            <TransactionList transactions={recentTransactions?.items ?? []} showDelete={false} />
+          )}
         </CardContent>
       </Card>
     </div>

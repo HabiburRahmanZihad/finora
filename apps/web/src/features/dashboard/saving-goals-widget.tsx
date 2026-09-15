@@ -6,7 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import type { SavingGoal } from "@/features/goals/use-saving-goals";
 
-export function SavingGoalsWidget({ goals }: { goals: SavingGoal[] }) {
+export function SavingGoalsWidget({
+  goals,
+  isLoading,
+}: {
+  goals: SavingGoal[];
+  isLoading?: boolean;
+}) {
   const activeGoals = goals.filter((g) => g.status === "ACTIVE").slice(0, 3);
 
   return (
@@ -22,7 +28,9 @@ export function SavingGoalsWidget({ goals }: { goals: SavingGoal[] }) {
           </Button>
         </div>
 
-        {activeGoals.length === 0 ? (
+        {isLoading ? (
+          <p className="text-xs text-muted-foreground">Loading…</p>
+        ) : activeGoals.length === 0 ? (
           <p className="text-xs text-muted-foreground">Create a saving goal to track progress here.</p>
         ) : (
           <div className="flex flex-col gap-3">

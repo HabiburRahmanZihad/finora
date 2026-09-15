@@ -7,5 +7,6 @@ import { DashboardModule } from "../dashboard/dashboard.module.js";
   imports: [DashboardModule],
   controllers: [ReportsController],
   providers: [ReportsService],
+  exports: [ReportsService],
 })
 export class ReportsModule {}

@@ -15,6 +15,11 @@ export class ApiError extends Error {
 }
 
 let cachedToken: { token: string; expiresAt: number } | null = null;
+// Single-flight guard: a dashboard-style page fires many useQuery hooks at
+// once, and each independently calls getToken() on mount. Without this,
+// every one of them races a separate (slow) /api/auth/token round trip
+// instead of sharing the single request already in flight.
+let inFlightTokenRequest: Promise<string | null> | null = null;
 
 /** Fetches (and caches) a short-lived JWT for the current Better Auth session. */
 async function getToken(forceRefresh = false): Promise<string | null> {
@@ -22,16 +27,28 @@ async function getToken(forceRefresh = false): Promise<string | null> {
     return cachedToken.token;
   }
 
-  const { data } = await authClient.token();
-  if (!data?.token) {
-    cachedToken = null;
-    return null;
+  if (inFlightTokenRequest) {
+    return inFlightTokenRequest;
   }
 
-  // Better Auth's JWT plugin defaults to a 15 minute expiry; refresh a
-  // minute early so in-flight requests don't race the real expiry.
-  cachedToken = { token: data.token, expiresAt: Date.now() + 14 * 60 * 1000 };
-  return cachedToken.token;
+  inFlightTokenRequest = (async () => {
+    try {
+      const { data } = await authClient.token();
+      if (!data?.token) {
+        cachedToken = null;
+        return null;
+      }
+
+      // Better Auth's JWT plugin defaults to a 15 minute expiry; refresh a
+      // minute early so in-flight requests don't race the real expiry.
+      cachedToken = { token: data.token, expiresAt: Date.now() + 14 * 60 * 1000 };
+      return cachedToken.token;
+    } finally {
+      inFlightTokenRequest = null;
+    }
+  })();
+
+  return inFlightTokenRequest;
 }
 
 async function request<T>(

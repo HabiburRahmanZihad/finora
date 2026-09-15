@@ -6,7 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import type { Budget } from "@/features/budgets/use-budgets";
 
-export function BudgetStatusWidget({ budgets }: { budgets: Budget[] }) {
+export function BudgetStatusWidget({
+  budgets,
+  isLoading,
+}: {
+  budgets: Budget[];
+  isLoading?: boolean;
+}) {
   const topBudgets = [...budgets].sort((a, b) => b.progress - a.progress).slice(0, 3);
 
   return (
@@ -22,7 +28,9 @@ export function BudgetStatusWidget({ budgets }: { budgets: Budget[] }) {
           </Button>
         </div>
 
-        {budgets.length === 0 ? (
+        {isLoading ? (
+          <p className="text-xs text-muted-foreground">Loading…</p>
+        ) : budgets.length === 0 ? (
           <p className="text-xs text-muted-foreground">Set category budgets to see progress here.</p>
         ) : (
           <div className="flex flex-col gap-3">

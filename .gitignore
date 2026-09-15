@@ -20,6 +20,9 @@ out/
 # prisma
 packages/database/generated/
 
+# uploaded files (local dev storage)
+apps/api/uploads/
+
 # logs
 *.log
 npm-debug.log*
