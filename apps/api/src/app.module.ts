@@ -23,6 +23,7 @@ import { RecurringTransactionsModule } from "./recurring-transactions/recurring-
 import { NotificationsModule } from "./notifications/notifications.module.js";
 import { ExportModule } from "./export/export.module.js";
 import { ReceiptsModule } from "./receipts/receipts.module.js";
+import { GamificationModule } from "./gamification/gamification.module.js";
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { ReceiptsModule } from "./receipts/receipts.module.js";
     NotificationsModule,
     ExportModule,
     ReceiptsModule,
+    GamificationModule,
   ],
   controllers: [HealthController],
   providers: [

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { Plus } from "lucide-react";
+import { Plus, Paperclip } from "lucide-react";
 import { createTransactionSchema, type CreateTransactionInput } from "@finora/validation";
 import { TransactionType, PaymentMethod, CategoryType } from "@finora/types";
 import { Button } from "@/components/ui/button";
@@ -23,6 +23,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCreateTransaction } from "./use-transactions";
 import { useAccounts } from "@/features/accounts/use-accounts";
 import { useCategories } from "@/features/categories/use-categories";
+import { useUploadReceipt } from "@/features/receipts/use-receipts";
 
 const paymentMethodLabels: Record<PaymentMethod, string> = {
   CASH: "Cash",
@@ -45,7 +46,9 @@ export function TransactionFormDialog({
   trigger?: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
+  const [receiptFile, setReceiptFile] = useState<File | null>(null);
   const createTransaction = useCreateTransaction();
+  const uploadReceipt = useUploadReceipt();
   const { data: accounts } = useAccounts();
   const { data: expenseCategories } = useCategories(CategoryType.EXPENSE);
   const { data: incomeCategories } = useCategories(CategoryType.INCOME);
@@ -75,9 +78,17 @@ export function TransactionFormDialog({
 
   const onSubmit = async (values: CreateTransactionInput) => {
     try {
-      await createTransaction.mutateAsync(values);
+      const created = await createTransaction.mutateAsync(values);
+      if (receiptFile) {
+        try {
+          await uploadReceipt.mutateAsync({ file: receiptFile, transactionId: created.id });
+        } catch {
+          toast.error("Transaction saved, but the receipt failed to upload");
+        }
+      }
       toast.success("Transaction added");
       reset(defaultValues);
+      setReceiptFile(null);
       setOpen(false);
     } catch {
       toast.error("Could not save transaction");
@@ -277,6 +288,24 @@ export function TransactionFormDialog({
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="note">Note</Label>
             <Input id="note" placeholder="Optional" {...register("note")} />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="receipt">Receipt (optional)</Label>
+            <label
+              htmlFor="receipt"
+              className="flex h-10 cursor-pointer items-center gap-2 rounded-lg border border-border bg-card px-3 text-sm text-muted-foreground hover:bg-muted"
+            >
+              <Paperclip className="size-4" />
+              {receiptFile ? receiptFile.name : "Attach receipt (image or PDF)"}
+            </label>
+            <input
+              id="receipt"
+              type="file"
+              accept="image/png,image/jpeg,image/webp,application/pdf"
+              className="hidden"
+              onChange={(e) => setReceiptFile(e.target.files?.[0] ?? null)}
+            />
           </div>
 
           <DialogFooter>

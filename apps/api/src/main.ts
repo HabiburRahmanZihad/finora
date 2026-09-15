@@ -12,6 +12,10 @@ async function bootstrap() {
   app.enableCors({
     origin: process.env.WEB_APP_URL ?? "http://localhost:3000",
     credentials: true,
+    // File downloads (export, receipts) need the browser to read the real
+    // filename; Content-Disposition isn't in the default CORS-safelisted
+    // response headers, so it must be explicitly exposed.
+    exposedHeaders: ["Content-Disposition"],
   });
 
   app.useGlobalPipes(new ZodValidationPipe());
@@ -19,7 +23,6 @@ async function bootstrap() {
 
   const port = process.env.PORT ? Number(process.env.PORT) : 4000;
   await app.listen(port);
-  // eslint-disable-next-line no-console
   console.log(`Finora API listening on http://localhost:${port}`);
 }
 

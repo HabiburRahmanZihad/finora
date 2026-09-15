@@ -7,6 +7,7 @@ import { TransactionType } from "@finora/types";
 import { Button } from "@/components/ui/button";
 import type { Transaction } from "./use-transactions";
 import { useDeleteTransaction } from "./use-transactions";
+import { ReceiptViewerDialog } from "@/features/receipts/receipt-viewer-dialog";
 
 const typeIcon = {
   [TransactionType.INCOME]: ArrowDownLeft,
@@ -87,6 +88,7 @@ export function TransactionList({
               {sign}
               {formatCurrency(transaction.amount, transaction.currency)}
             </p>
+            <ReceiptViewerDialog receipts={transaction.receipts} />
             {showDelete && (
               <Button
                 variant="ghost"

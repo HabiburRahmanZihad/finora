@@ -19,6 +19,14 @@ export interface Tag {
   color: string | null;
 }
 
+export interface TransactionReceipt {
+  id: string;
+  fileName: string;
+  fileUrl: string;
+  mimeType: string;
+  fileSize: number;
+}
+
 export interface Transaction {
   id: string;
   type: TransactionType;
@@ -38,6 +46,7 @@ export interface Transaction {
   note: string | null;
   location: string | null;
   tags: { tag: Tag }[];
+  receipts: TransactionReceipt[];
   createdAt: string;
 }
 

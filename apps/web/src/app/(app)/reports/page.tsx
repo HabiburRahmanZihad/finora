@@ -8,6 +8,7 @@ import { StatRow } from "@/features/reports/stat-row";
 import { ExpenseByCategoryChart } from "@/features/dashboard/expense-by-category-chart";
 import { MonthlyTrendChart } from "@/features/dashboard/monthly-trend-chart";
 import { useDailyReport, useMonthlyReport, useYearlyReport } from "@/features/reports/use-reports";
+import { ExportMenu } from "@/features/export/export-menu";
 
 const statusVariant = { NORMAL: "success", WARNING: "warning", EXCEEDED: "danger" } as const;
 
@@ -57,6 +58,9 @@ function MonthlyReportView() {
 
   return (
     <div className="flex flex-col gap-4">
+      <div className="flex justify-end">
+        <ExportMenu basePath="/export/monthly-report" />
+      </div>
       <Card>
         <CardContent className="p-5">
           <StatRow

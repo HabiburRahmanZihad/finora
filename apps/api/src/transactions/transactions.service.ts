@@ -14,6 +14,7 @@ const transactionInclude = {
   fromAccount: true,
   toAccount: true,
   tags: { include: { tag: true } },
+  receipts: true,
 } satisfies Prisma.TransactionInclude;
 
 @Injectable()
