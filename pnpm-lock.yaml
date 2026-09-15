@@ -230,19 +230,15 @@ importers:
         specifier: ^5.7.2
         version: 5.9.3
 
-  packages/types:
-    dependencies:
-      '@finora/database':
-        specifier: workspace:*
-        version: link:../database
+  packages/types: {}
 
   packages/utils: {}
 
   packages/validation:
     dependencies:
-      '@finora/database':
+      '@finora/types':
         specifier: workspace:*
-        version: link:../database
+        version: link:../types
       zod:
         specifier: ^3.24.1
         version: 3.25.76

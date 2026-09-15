@@ -58,6 +58,7 @@ model Session {
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([userId])
   @@map("session")
 }
 
@@ -77,6 +78,7 @@ model Account {
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
 
+  @@index([userId])
   @@map("account")
 }
 
@@ -88,15 +90,19 @@ model Verification {
   createdAt  DateTime? @default(now())
   updatedAt  DateTime? @updatedAt
 
+  @@index([identifier])
   @@map("verification")
 }
 
 /// Public/private signing keys for Better Auth's JWT plugin (JWKS endpoint).
 model Jwks {
-  id         String   @id
+  id         String    @id
   publicKey  String
   privateKey String
-  createdAt  DateTime @default(now())
+  createdAt  DateTime
+  expiresAt  DateTime?
+  alg        String?
+  crv        String?
 
   @@map("jwks")
 }

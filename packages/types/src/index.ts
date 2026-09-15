@@ -1,20 +1,7 @@
-// Re-export Prisma's generated enums so both apps import domain types from
-// one place. Computed / UI-only types (never persisted as-is) live below.
-export {
-  AccountType,
-  AccountStatus,
-  CategoryType,
-  CategoryStatus,
-  TransactionType,
-  PaymentMethod,
-  BillingCycle,
-  SubscriptionStatus,
-  RecurrenceFrequency,
-  RecurringStatus,
-  NotificationType,
-  InsightSeverity,
-  SavingGoalStatus,
-} from "@finora/database";
+// Domain enums, mirrored from schema.prisma (see ./enums.ts for why this
+// isn't just a re-export from @finora/database). Computed / UI-only types
+// (never persisted as-is) live below.
+export * from "./enums.js";
 
 /** Computed at query time from Budget.amount vs current-month spend — not stored. */
 export type BudgetStatus = "NORMAL" | "WARNING" | "EXCEEDED";

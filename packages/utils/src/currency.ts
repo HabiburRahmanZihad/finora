@@ -6,7 +6,7 @@
  */
 export function formatSouthAsianNumber(value: number): string {
   const isNegative = value < 0;
-  const [intPart, decPart] = Math.abs(value).toFixed(2).split(".");
+  const [intPart = "0", decPart = "00"] = Math.abs(value).toFixed(2).split(".");
   const lastThree = intPart.slice(-3);
   const other = intPart.slice(0, -3);
   const formattedOther = other === "" ? "" : other.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + ",";

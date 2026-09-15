@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { CategoryStatus, CategoryType } from "@finora/database";
+import { CategoryStatus, CategoryType } from "@finora/types";
 
 export const createCategorySchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(60),

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { AccountStatus, AccountType } from "@finora/database";
+import { AccountStatus, AccountType } from "@finora/types";
 import { moneyAmountSchema } from "./common.js";
 
 export const createFinancialAccountSchema = z.object({

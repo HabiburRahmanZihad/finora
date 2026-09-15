@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { PaymentMethod, TransactionType } from "@finora/database";
+import { PaymentMethod, TransactionType } from "@finora/types";
 import { moneyAmountSchema } from "./common.js";
 
 const baseFields = {
