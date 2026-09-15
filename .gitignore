@@ -21,7 +21,7 @@ out/
 packages/database/generated/
 
 # uploaded files (local dev storage)
-apps/api/uploads/
+apps/server/uploads/
 
 # logs
 *.log

@@ -9,7 +9,7 @@ export interface AuthenticatedUser {
 
 /**
  * Verifies bearer tokens minted by Better Auth's JWT plugin (running in
- * apps/web) against its JWKS endpoint, per Better Auth's own documented
+ * apps/client) against its JWKS endpoint, per Better Auth's own documented
  * verification approach (jose + createRemoteJWKSet).
  */
 @Injectable()

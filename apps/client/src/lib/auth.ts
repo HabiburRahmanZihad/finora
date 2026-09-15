@@ -23,7 +23,7 @@ export const auth = betterAuth({
     },
   },
 
-  // Add GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET to apps/web/.env.local to enable.
+  // Add GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET to apps/client/.env.local to enable.
   socialProviders: googleConfigured
     ? {
         google: {
@@ -34,8 +34,8 @@ export const auth = betterAuth({
     : undefined,
 
   // Issues short-lived JWTs (GET /api/auth/token) + a JWKS endpoint
-  // (GET /api/auth/jwks) that apps/api verifies against. See
-  // apps/api/src/auth/jwt-verifier.service.ts.
+  // (GET /api/auth/jwks) that apps/server verifies against. See
+  // apps/server/src/auth/jwt-verifier.service.ts.
   plugins: [
     jwt({
       jwt: {

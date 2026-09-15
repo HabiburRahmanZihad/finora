@@ -1,7 +1,7 @@
 // Finora — shared Prisma schema.
 // Contains Better Auth's own tables (user/session/account/verification/jwks)
 // PLUS every Finora domain table. One schema, one migration history,
-// used by both apps/web (Better Auth) and apps/api (NestJS).
+// used by both apps/client (Better Auth) and apps/server (NestJS).
 
 generator client {
   provider = "prisma-client-js"
