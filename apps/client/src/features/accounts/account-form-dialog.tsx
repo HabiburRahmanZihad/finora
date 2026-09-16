@@ -5,6 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Plus } from "lucide-react";
+import type { z } from "zod";
 import { createFinancialAccountSchema, type CreateFinancialAccountInput } from "@finora/validation";
 import { AccountType } from "@finora/types";
 import { Button } from "@/components/ui/button";
@@ -31,7 +32,11 @@ export function AccountFormDialog() {
     control,
     reset,
     formState: { errors },
-  } = useForm<CreateFinancialAccountInput>({
+  } = useForm<
+    z.input<typeof createFinancialAccountSchema>,
+    unknown,
+    z.output<typeof createFinancialAccountSchema>
+  >({
     resolver: zodResolver(createFinancialAccountSchema),
     defaultValues: { type: AccountType.CASH, balance: "0", currency: "BDT" },
   });

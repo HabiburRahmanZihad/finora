@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import type { z } from "zod";
 import { contributeSavingGoalSchema, type ContributeSavingGoalInput } from "@finora/validation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,7 +27,11 @@ export function ContributeDialog({ goalId, goalName }: { goalId: string; goalNam
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<ContributeSavingGoalInput>({ resolver: zodResolver(contributeSavingGoalSchema) });
+  } = useForm<
+    z.input<typeof contributeSavingGoalSchema>,
+    unknown,
+    z.output<typeof contributeSavingGoalSchema>
+  >({ resolver: zodResolver(contributeSavingGoalSchema) });
 
   const onSubmit = async (values: ContributeSavingGoalInput) => {
     try {

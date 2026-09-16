@@ -2,12 +2,12 @@
   "name": "@finora/database",
   "private": true,
   "version": "0.1.0",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
+      "types": "./dist/src/index.d.ts",
+      "default": "./dist/src/index.js"
     }
   },
   "scripts": {
@@ -19,11 +19,13 @@
     "seed": "tsx --env-file=.env prisma/seed.ts"
   },
   "dependencies": {
-    "@prisma/client": "^6.2.1"
+    "@prisma/adapter-pg": "^7.10.0",
+    "@prisma/client": "^7.10.0"
   },
   "devDependencies": {
-    "@types/node": "^22.10.5",
-    "prisma": "^6.2.1",
+    "@types/node": "^22.20.3",
+    "dotenv": "^16.4.7",
+    "prisma": "7.10.0",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   }

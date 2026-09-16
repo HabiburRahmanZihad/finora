@@ -5,6 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Plus } from "lucide-react";
+import type { z } from "zod";
 import { createSubscriptionSchema, type CreateSubscriptionInput } from "@finora/validation";
 import { BillingCycle } from "@finora/types";
 import { Button } from "@/components/ui/button";
@@ -30,7 +31,11 @@ export function SubscriptionFormDialog() {
     control,
     reset,
     formState: { errors },
-  } = useForm<CreateSubscriptionInput>({
+  } = useForm<
+    z.input<typeof createSubscriptionSchema>,
+    unknown,
+    z.output<typeof createSubscriptionSchema>
+  >({
     resolver: zodResolver(createSubscriptionSchema),
     defaultValues: { billingCycle: BillingCycle.MONTHLY },
   });

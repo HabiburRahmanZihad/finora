@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Plus } from "lucide-react";
+import type { z } from "zod";
 import { createSavingGoalSchema, type CreateSavingGoalInput } from "@finora/validation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,7 +28,9 @@ export function GoalFormDialog() {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<CreateSavingGoalInput>({ resolver: zodResolver(createSavingGoalSchema) });
+  } = useForm<z.input<typeof createSavingGoalSchema>, unknown, z.output<typeof createSavingGoalSchema>>({
+    resolver: zodResolver(createSavingGoalSchema),
+  });
 
   const onSubmit = async (values: CreateSavingGoalInput) => {
     try {

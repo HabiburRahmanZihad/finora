@@ -2,7 +2,8 @@
   "extends": "../config/base.json",
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "src"
+    "rootDir": ".",
+    "skipLibCheck": true
   },
-  "include": ["src"]
+  "include": ["src/**/*", "generated/**/*"]
 }

@@ -5,6 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Plus, Paperclip } from "lucide-react";
+import type { z } from "zod";
 import { createTransactionSchema, type CreateTransactionInput } from "@finora/validation";
 import { TransactionType, PaymentMethod, CategoryType } from "@finora/types";
 import { Button } from "@/components/ui/button";
@@ -53,12 +54,15 @@ export function TransactionFormDialog({
   const { data: expenseCategories } = useCategories(CategoryType.EXPENSE);
   const { data: incomeCategories } = useCategories(CategoryType.INCOME);
 
+  type TransactionFormInput = z.input<typeof createTransactionSchema>;
+  type TransactionFormOutput = z.output<typeof createTransactionSchema>;
+
   const defaultValues = {
     type: defaultType,
     amount: "",
     date: new Date(),
     tagIds: [],
-  } as unknown as CreateTransactionInput;
+  } as unknown as TransactionFormInput;
 
   const {
     register,
@@ -68,7 +72,7 @@ export function TransactionFormDialog({
     reset,
     setValue,
     formState: { errors },
-  } = useForm<CreateTransactionInput>({
+  } = useForm<TransactionFormInput, unknown, TransactionFormOutput>({
     resolver: zodResolver(createTransactionSchema),
     defaultValues,
   });

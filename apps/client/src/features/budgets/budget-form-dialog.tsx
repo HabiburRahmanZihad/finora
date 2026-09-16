@@ -5,6 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Plus } from "lucide-react";
+import type { z } from "zod";
 import { createBudgetSchema, type CreateBudgetInput } from "@finora/validation";
 import { CategoryType } from "@finora/types";
 import { Button } from "@/components/ui/button";
@@ -35,7 +36,9 @@ export function BudgetFormDialog({ existingBudgets }: { existingBudgets: Budget[
     control,
     reset,
     formState: { errors },
-  } = useForm<CreateBudgetInput>({ resolver: zodResolver(createBudgetSchema) });
+  } = useForm<z.input<typeof createBudgetSchema>, unknown, z.output<typeof createBudgetSchema>>({
+    resolver: zodResolver(createBudgetSchema),
+  });
 
   const onSubmit = async (values: CreateBudgetInput) => {
     try {

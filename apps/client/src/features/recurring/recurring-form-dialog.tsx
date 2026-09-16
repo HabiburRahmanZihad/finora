@@ -5,6 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Plus } from "lucide-react";
+import type { z } from "zod";
 import {
   createRecurringTransactionSchema,
   type CreateRecurringTransactionInput,
@@ -48,7 +49,11 @@ export function RecurringFormDialog() {
     watch,
     reset,
     formState: { errors },
-  } = useForm<CreateRecurringTransactionInput>({
+  } = useForm<
+    z.input<typeof createRecurringTransactionSchema>,
+    unknown,
+    z.output<typeof createRecurringTransactionSchema>
+  >({
     resolver: zodResolver(createRecurringTransactionSchema),
     defaultValues: { type: TransactionType.EXPENSE, frequency: RecurrenceFrequency.MONTHLY },
   });
