@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { NavLinks } from "./nav-links";
 
-export function Sidebar() {
+export function Sidebar({ role }: { role?: string }) {
   return (
     <aside className="hidden w-64 shrink-0 flex-col border-r border-border bg-card md:flex">
       <div className="flex h-16 items-center border-b border-border px-5">
@@ -9,7 +9,7 @@ export function Sidebar() {
           Finora
         </Link>
       </div>
-      <NavLinks />
+      <NavLinks role={role} />
     </aside>
   );
 }

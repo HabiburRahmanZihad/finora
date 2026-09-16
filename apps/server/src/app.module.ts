@@ -1,8 +1,9 @@
-import { Module } from "@nestjs/common";
+import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { ThrottlerModule, ThrottlerGuard } from "@nestjs/throttler";
 import { APP_GUARD } from "@nestjs/core";
 import { PrismaModule } from "./prisma/prisma.module.js";
+import { RequestLoggerMiddleware } from "./common/request-logger.middleware.js";
 import { AuthModule } from "./auth/auth.module.js";
 import { UsersModule } from "./users/users.module.js";
 import { HealthController } from "./health/health.controller.js";
@@ -24,6 +25,7 @@ import { NotificationsModule } from "./notifications/notifications.module.js";
 import { ExportModule } from "./export/export.module.js";
 import { ReceiptsModule } from "./receipts/receipts.module.js";
 import { GamificationModule } from "./gamification/gamification.module.js";
+import { AdminModule } from "./admin/admin.module.js";
 
 @Module({
   imports: [
@@ -52,6 +54,7 @@ import { GamificationModule } from "./gamification/gamification.module.js";
     ExportModule,
     ReceiptsModule,
     GamificationModule,
+    AdminModule,
   ],
   controllers: [HealthController],
   providers: [
@@ -61,4 +64,8 @@ import { GamificationModule } from "./gamification/gamification.module.js";
     },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(RequestLoggerMiddleware).forRoutes("*");
+  }
+}

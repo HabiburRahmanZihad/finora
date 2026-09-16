@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { jwt } from "better-auth/plugins";
+import { jwt, admin } from "better-auth/plugins";
 import { prisma } from "@finora/database";
 
 const googleConfigured = Boolean(
@@ -35,7 +35,9 @@ export const auth = betterAuth({
 
   // Issues short-lived JWTs (GET /api/auth/token) + a JWKS endpoint
   // (GET /api/auth/jwks) that apps/server verifies against. See
-  // apps/server/src/auth/jwt-verifier.service.ts.
+  // apps/server/src/auth/jwt-verifier.service.ts. The jwt plugin's default
+  // payload is the full session user object, so `role` (added by the admin
+  // plugin below) flows into the token automatically.
   plugins: [
     jwt({
       jwt: {
@@ -45,6 +47,10 @@ export const auth = betterAuth({
         keyPairConfig: { alg: "RS256" },
       },
     }),
+    // Adds role/ban fields to User + admin APIs (listUsers, setUserPassword,
+    // setRole, banUser, ...). defaultRole "user" / adminRoles ["admin"] are
+    // the built-in defaults and match the seeded admin@finora.com account.
+    admin(),
   ],
 
   databaseHooks: {

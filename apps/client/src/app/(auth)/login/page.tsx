@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { GoogleButton } from "@/components/auth/google-button";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -65,6 +66,12 @@ export default function LoginPage() {
             {loading ? "Signing in…" : "Sign in"}
           </Button>
         </form>
+        <div className="my-4 flex items-center gap-3">
+          <div className="h-px flex-1 bg-border" />
+          <span className="text-xs text-muted-foreground">or continue with</span>
+          <div className="h-px flex-1 bg-border" />
+        </div>
+        <GoogleButton />
         <p className="mt-6 text-center text-sm text-muted-foreground">
           Don&apos;t have an account?{" "}
           <Link href="/register" className="font-medium text-primary hover:underline">

@@ -1,8 +1,14 @@
 import { PrismaClient, CategoryType } from "../generated/client/client.js";
 import { PrismaPg } from "@prisma/adapter-pg";
+import { hashPassword } from "better-auth/crypto";
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
+
+const ADMIN_USER_ID = "seed-admin-user";
+const ADMIN_ACCOUNT_ID = "seed-admin-account";
+const ADMIN_EMAIL = "admin@finora.com";
+const ADMIN_PASSWORD = "Pa$$w0rd";
 
 const defaultExpenseCategories = [
   { name: "Food", icon: "utensils" },
@@ -64,6 +70,36 @@ async function main() {
   console.log(
     `Seeded ${defaultExpenseCategories.length} expense + ${defaultIncomeCategories.length} income default categories.`,
   );
+
+  const passwordHash = await hashPassword(ADMIN_PASSWORD);
+
+  await prisma.user.upsert({
+    where: { id: ADMIN_USER_ID },
+    update: { role: "admin" },
+    create: {
+      id: ADMIN_USER_ID,
+      name: "Finora Admin",
+      email: ADMIN_EMAIL,
+      emailVerified: true,
+      role: "admin",
+    },
+  });
+
+  // Mirrors Better Auth's own sign-up flow (providerId: "credential",
+  // accountId === userId) so the seeded admin can sign in normally.
+  await prisma.account.upsert({
+    where: { id: ADMIN_ACCOUNT_ID },
+    update: { password: passwordHash },
+    create: {
+      id: ADMIN_ACCOUNT_ID,
+      accountId: ADMIN_USER_ID,
+      providerId: "credential",
+      userId: ADMIN_USER_ID,
+      password: passwordHash,
+    },
+  });
+
+  console.log(`Seeded admin user ${ADMIN_EMAIL}.`);
 }
 
 function slug(name: string) {

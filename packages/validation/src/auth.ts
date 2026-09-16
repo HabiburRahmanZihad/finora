@@ -35,3 +35,15 @@ export const resetPasswordSchema = z.object({
     .regex(/[0-9]/, "Password must contain a number"),
 });
 export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
+
+/** Used by the admin "reset a user's password" dialog. */
+export const adminSetPasswordSchema = z.object({
+  newPassword: z
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .max(128)
+    .regex(/[a-z]/, "Password must contain a lowercase letter")
+    .regex(/[A-Z]/, "Password must contain an uppercase letter")
+    .regex(/[0-9]/, "Password must contain a number"),
+});
+export type AdminSetPasswordInput = z.infer<typeof adminSetPasswordSchema>;

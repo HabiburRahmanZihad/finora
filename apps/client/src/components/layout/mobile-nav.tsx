@@ -7,7 +7,7 @@ import { Menu, X } from "lucide-react";
 import { NavLinks } from "./nav-links";
 import { Button } from "@/components/ui/button";
 
-export function MobileNav() {
+export function MobileNav({ role }: { role?: string }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -35,7 +35,7 @@ export function MobileNav() {
             </Dialog.Close>
           </div>
           <Dialog.Title className="sr-only">Navigation</Dialog.Title>
-          <NavLinks onNavigate={() => setOpen(false)} />
+          <NavLinks role={role} onNavigate={() => setOpen(false)} />
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>

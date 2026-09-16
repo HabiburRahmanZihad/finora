@@ -5,6 +5,7 @@ export interface AuthenticatedUser {
   id: string;
   email?: string;
   name?: string;
+  role?: string;
 }
 
 /**
@@ -38,6 +39,7 @@ export class JwtVerifierService {
       id: String(payload.sub),
       email: typeof payload.email === "string" ? payload.email : undefined,
       name: typeof payload.name === "string" ? payload.name : undefined,
+      role: typeof payload.role === "string" ? payload.role : undefined,
     };
   }
 }

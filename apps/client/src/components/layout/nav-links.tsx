@@ -2,15 +2,20 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { navItems } from "./nav-items";
 
-export function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
+export function NavLinks({ role, onNavigate }: { role?: string; onNavigate?: () => void }) {
   const pathname = usePathname();
+  const items =
+    role === "admin"
+      ? [...navItems, { label: "Admin", href: "/admin", icon: ShieldCheck }]
+      : navItems;
 
   return (
     <nav className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-3 py-2">
-      {navItems.map((item) => {
+      {items.map((item) => {
         const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
         const Icon = item.icon;
         return (
