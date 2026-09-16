@@ -4,7 +4,7 @@ export function StatRow({ items }: { items: { label: string; value: string }[] }
       {items.map((item) => (
         <div key={item.label}>
           <p className="text-xs text-muted-foreground">{item.label}</p>
-          <p className="text-lg font-semibold text-foreground">{item.value}</p>
+          <p className="wrap-break-word text-lg font-semibold text-foreground">{item.value}</p>
         </div>
       ))}
     </div>

@@ -23,7 +23,7 @@ export default function SubscriptionsPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
           <h1 className="text-2xl font-semibold text-foreground">Subscriptions</h1>
           <p className="text-sm text-muted-foreground">Recurring subscriptions and their cost.</p>
@@ -32,7 +32,7 @@ export default function SubscriptionsPage() {
       </div>
 
       {data && (
-        <div className="grid grid-cols-2 gap-4 sm:max-w-md">
+        <div className="grid grid-cols-1 gap-4 sm:max-w-md sm:grid-cols-2">
           <Card>
             <CardContent className="p-5">
               <p className="text-xs text-muted-foreground">Monthly cost</p>

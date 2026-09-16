@@ -25,7 +25,7 @@ export default function AdminOverviewPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
           <h1 className="text-2xl font-semibold text-foreground">Admin</h1>
           <p className="text-sm text-muted-foreground">Site health, traffic, and user management.</p>

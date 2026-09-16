@@ -26,7 +26,7 @@ export default function GoalsPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
           <h1 className="text-2xl font-semibold text-foreground">Saving Goals</h1>
           <p className="text-sm text-muted-foreground">
@@ -79,7 +79,7 @@ export default function GoalsPage() {
               <Progress value={goal.progress} tone={goal.status === "COMPLETED" ? "NORMAL" : "NORMAL"} />
               <p className="text-xs text-muted-foreground">{goal.progress}% complete</p>
 
-              <div className="grid grid-cols-2 gap-3 text-sm">
+              <div className="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
                 <div>
                   <p className="text-xs text-muted-foreground">Remaining</p>
                   <p className="font-medium text-foreground">{formatCurrency(goal.remaining, "BDT")}</p>
