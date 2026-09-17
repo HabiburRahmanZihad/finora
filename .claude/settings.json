@@ -15,7 +15,8 @@
       "Bash(node test-upgrade-regression.js)",
       "Bash(sed -i 's/timeout: 20000/timeout: 45000/' test-upgrade-regression.js)",
       "Bash(rm -f /tmp/finora_cookies3.txt)",
-      "Bash(curl -s -c /tmp/finora_cookies3.txt -X POST http://localhost:3000/api/auth/sign-in/email -H 'Content-Type: application/json' -d '{\"email\":\"test1@finora.dev\",\"password\":\"Passw0rd123\"}' -w '\\\\nSIGNIN_HTTP:%{http_code}\\\\n')"
+      "Bash(curl -s -c /tmp/finora_cookies3.txt -X POST http://localhost:3000/api/auth/sign-in/email -H 'Content-Type: application/json' -d '{\"email\":\"test1@finora.dev\",\"password\":\"Passw0rd123\"}' -w '\\\\nSIGNIN_HTTP:%{http_code}\\\\n')",
+      "Bash(curl -s -c /tmp/finora-cookies2.txt -X POST http://localhost:3000/api/auth/sign-up/email -H 'Content-Type: application/json' -d '{\"name\":\"Test User\",\"email\":\"testuser-smoketest@finora.com\",\"password\":\"Pa$$w0rd1\"}' -w '\\\\nSTATUS:%{http_code}\\\\n')"
     ]
   }
 }
