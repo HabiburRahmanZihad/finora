@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Menu, X } from "lucide-react";
 import { NavLinks } from "./nav-links";
@@ -23,10 +24,11 @@ export function MobileNav({ role }: { role?: string }) {
           <div className="flex h-16 items-center justify-between border-b border-border px-5">
             <Link
               href="/dashboard"
-              className="text-xl font-semibold tracking-tight text-primary"
+              className="flex items-center gap-2"
               onClick={() => setOpen(false)}
             >
-              Finora
+              <Image src="/finora.png" alt="Finora" width={28} height={28} />
+              <Image src="/text.png" alt="Finora" width={90} height={30} className="h-6 w-auto" />
             </Link>
             <Dialog.Close asChild>
               <Button variant="ghost" size="icon" aria-label="Close menu">
