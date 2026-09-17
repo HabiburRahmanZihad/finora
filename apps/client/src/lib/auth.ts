@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { jwt, admin } from "better-auth/plugins";
+import { expo } from "@better-auth/expo";
 import { prisma } from "@finora/database";
 
 const googleConfigured = Boolean(
@@ -51,6 +52,10 @@ export const auth = betterAuth({
     // setRole, banUser, ...). defaultRole "user" / adminRoles ["admin"] are
     // the built-in defaults and match the seeded admin@finora.com account.
     admin(),
+    // Lets apps/mobile's expoClient() talk to this same Better Auth instance
+    // (trusts the app's "finora://" deep-link scheme as an origin, and
+    // adjusts cookie handling for React Native's fetch instead of a browser).
+    expo(),
   ],
 
   databaseHooks: {
