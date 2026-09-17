@@ -9,7 +9,7 @@ import { adminSetPasswordSchema, type AdminSetPasswordInput } from "@finora/vali
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
 import {
   Dialog,
@@ -58,9 +58,8 @@ function ResetPasswordDialog({ userId }: { userId: string }) {
         <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="newPassword">New password</Label>
-            <Input
+            <PasswordInput
               id="newPassword"
-              type="password"
               placeholder="••••••••"
               {...register("newPassword")}
             />

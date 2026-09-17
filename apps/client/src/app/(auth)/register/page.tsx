@@ -10,6 +10,7 @@ import { registerSchema, type RegisterInput } from "@finora/validation";
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { GoogleButton } from "@/components/auth/google-button";
@@ -61,7 +62,7 @@ export default function RegisterPage() {
           </div>
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" placeholder="••••••••" {...register("password")} />
+            <PasswordInput id="password" placeholder="••••••••" {...register("password")} />
             {errors.password && <p className="text-xs text-danger">{errors.password.message}</p>}
           </div>
           <Button type="submit" disabled={loading} className="mt-2">
