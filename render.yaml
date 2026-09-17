@@ -1,0 +1,28 @@
+# Render Blueprint for apps/server (the NestJS API).
+# Deploy via Render's "New +" → "Blueprint", pointing at this repo — this
+# replaces the manual "New Web Service" dashboard steps documented in
+# README.md's Deployment section with a single, repeatable definition.
+#
+# Values with `sync: false` are intentionally NOT stored here (Render will
+# prompt for them once when the Blueprint is first applied, then remember
+# them per-environment) — see apps/server/.env.production.example for what
+# each one should be set to.
+services:
+  - type: web
+    name: finora-api
+    runtime: node
+    plan: free
+    branch: main
+    rootDir: .
+    buildCommand: pnpm install && pnpm exec turbo run build --filter=@finora/server
+    startCommand: pnpm --filter @finora/server run start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: DATABASE_URL
+        sync: false
+      - key: WEB_APP_URL
+        sync: false
+      - key: BETTER_AUTH_URL
+        sync: false

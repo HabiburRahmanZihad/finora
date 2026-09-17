@@ -125,6 +125,11 @@ DATABASE_URL="<your-prod-connection-string>" pnpm --filter @finora/database run 
 Render's free tier works for this (spins down when idle; first request after idle takes ~30–60s
 to wake — fine for a personal project, worth knowing before you wonder why the first login is slow).
 
+**Fastest path**: a `render.yaml` Blueprint at the repo root already encodes steps 2–5 below (root
+directory, build/start commands, health check path). Render → **New +** → **Blueprint** → connect
+this repo → it reads `render.yaml` automatically and only prompts you for the three env vars in
+step 6. The manual steps are spelled out below in case you'd rather set the service up by hand.
+
 1. **New → Web Service**, connect this repo.
 2. **Root Directory**: leave blank (repo root) — the build/start commands below are written to
    run from there, which sidesteps any ambiguity about how Render resolves the pnpm workspace
@@ -145,6 +150,11 @@ to wake — fine for a personal project, worth knowing before you wonder why the
    the client's `NEXT_PUBLIC_API_URL`.
 
 ### 3. Web app (apps/client → Vercel)
+
+`apps/client/vercel.json` already encodes the framework preset, build command, and output
+directory (steps 3–5 below) — Vercel reads it automatically once Root Directory is set. **Root
+Directory is the one setting `vercel.json` can't express** (it's not part of its schema), so step 2
+below is still a manual, one-time click regardless of the file.
 
 1. **Add New → Project**, import this repo.
 2. **Root Directory**: `apps/client` (Vercel needs this to detect it's a Next.js app and set
