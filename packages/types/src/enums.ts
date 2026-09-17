@@ -88,6 +88,8 @@ export const NotificationType = {
   SUBSCRIPTION_REMINDER: "SUBSCRIPTION_REMINDER",
   FINANCIAL_INSIGHT: "FINANCIAL_INSIGHT",
   MONTHLY_REPORT_AVAILABLE: "MONTHLY_REPORT_AVAILABLE",
+  LOAN_PAYMENT_DUE: "LOAN_PAYMENT_DUE",
+  LOAN_PAYMENT_OVERDUE: "LOAN_PAYMENT_OVERDUE",
 } as const;
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType];
 
@@ -104,3 +106,54 @@ export const SavingGoalStatus = {
   ARCHIVED: "ARCHIVED",
 } as const;
 export type SavingGoalStatus = (typeof SavingGoalStatus)[keyof typeof SavingGoalStatus];
+
+export const LoanType = {
+  PERSONAL: "PERSONAL",
+  BANK: "BANK",
+  CREDIT_CARD: "CREDIT_CARD",
+  FRIEND_FAMILY: "FRIEND_FAMILY",
+  MORTGAGE: "MORTGAGE",
+  VEHICLE: "VEHICLE",
+  STUDENT: "STUDENT",
+  BUSINESS: "BUSINESS",
+  OTHER: "OTHER",
+} as const;
+export type LoanType = (typeof LoanType)[keyof typeof LoanType];
+
+export const LoanInterestType = {
+  PERCENTAGE: "PERCENTAGE",
+  FIXED: "FIXED",
+} as const;
+export type LoanInterestType = (typeof LoanInterestType)[keyof typeof LoanInterestType];
+
+export const LoanInterestFrequency = {
+  ONE_TIME: "ONE_TIME",
+  WEEKLY: "WEEKLY",
+  MONTHLY: "MONTHLY",
+  YEARLY: "YEARLY",
+} as const;
+export type LoanInterestFrequency = (typeof LoanInterestFrequency)[keyof typeof LoanInterestFrequency];
+
+export const LoanRepaymentFrequency = {
+  ONE_TIME: "ONE_TIME",
+  DAILY: "DAILY",
+  WEEKLY: "WEEKLY",
+  BI_WEEKLY: "BI_WEEKLY",
+  MONTHLY: "MONTHLY",
+  QUARTERLY: "QUARTERLY",
+  YEARLY: "YEARLY",
+  CUSTOM: "CUSTOM",
+} as const;
+export type LoanRepaymentFrequency = (typeof LoanRepaymentFrequency)[keyof typeof LoanRepaymentFrequency];
+
+export const LoanInstallmentType = {
+  FIXED: "FIXED",
+  VARIABLE: "VARIABLE",
+} as const;
+export type LoanInstallmentType = (typeof LoanInstallmentType)[keyof typeof LoanInstallmentType];
+
+export const LoanStatus = {
+  ACTIVE: "ACTIVE",
+  CLOSED: "CLOSED",
+} as const;
+export type LoanStatus = (typeof LoanStatus)[keyof typeof LoanStatus];

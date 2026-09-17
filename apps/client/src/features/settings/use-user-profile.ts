@@ -21,6 +21,7 @@ export interface UserProfile {
     notifySubscriptionReminder: boolean;
     notifyFinancialInsight: boolean;
     notifyMonthlyReport: boolean;
+    notifyLoanPaymentReminder: boolean;
   };
 }
 

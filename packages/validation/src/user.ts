@@ -13,5 +13,6 @@ export const updateUserProfileSchema = z.object({
   notifySubscriptionReminder: z.boolean().optional(),
   notifyFinancialInsight: z.boolean().optional(),
   notifyMonthlyReport: z.boolean().optional(),
+  notifyLoanPaymentReminder: z.boolean().optional(),
 });
 export type UpdateUserProfileInput = z.infer<typeof updateUserProfileSchema>;

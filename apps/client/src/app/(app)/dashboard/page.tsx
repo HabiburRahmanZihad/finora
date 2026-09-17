@@ -17,6 +17,7 @@ import { ExpenseByCategoryChart } from "@/features/dashboard/expense-by-category
 import { MonthlyTrendChart } from "@/features/dashboard/monthly-trend-chart";
 import { BudgetStatusWidget } from "@/features/dashboard/budget-status-widget";
 import { SavingGoalsWidget } from "@/features/dashboard/saving-goals-widget";
+import { LoanSummaryWidget } from "@/features/dashboard/loan-summary-widget";
 import { HealthScoreCard } from "@/features/dashboard/health-score-card";
 import { useHealthScore } from "@/features/dashboard/use-health-score";
 import { useTransactions } from "@/features/transactions/use-transactions";
@@ -25,6 +26,7 @@ import { TransactionFormDialog } from "@/features/transactions/transaction-form-
 import { TransactionType } from "@finora/types";
 import { useBudgets } from "@/features/budgets/use-budgets";
 import { useSavingGoals } from "@/features/goals/use-saving-goals";
+import { useLoans } from "@/features/loans/use-loans";
 import { useInsights } from "@/features/insights/use-insights";
 import { InsightList } from "@/features/insights/insight-list";
 
@@ -40,6 +42,7 @@ export default function DashboardPage() {
   });
   const { data: budgets, isLoading: budgetsLoading } = useBudgets();
   const { data: goals, isLoading: goalsLoading } = useSavingGoals();
+  const { data: loansData, isLoading: loansLoading } = useLoans();
   const { data: health } = useHealthScore();
   const { data: insights, isLoading: insightsLoading } = useInsights();
 
@@ -119,9 +122,10 @@ export default function DashboardPage() {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         <BudgetStatusWidget budgets={budgets ?? []} isLoading={budgetsLoading} />
         <SavingGoalsWidget goals={goals ?? []} isLoading={goalsLoading} />
+        <LoanSummaryWidget loans={loansData?.loans ?? []} isLoading={loansLoading} />
       </div>
 
       <Card>

@@ -136,6 +136,25 @@ export class NotificationsService {
       }
     }
 
+    if (settings.notifyLoanPaymentReminder) {
+      const dueSoon = await this.prisma.loanRepaymentSchedule.findMany({
+        where: { userId, dueDate: { lte: soon }, loan: { status: "ACTIVE" } },
+        include: { loan: true },
+      });
+      for (const row of dueSoon) {
+        const totalDue = new Prisma.Decimal(row.totalDue);
+        if (totalDue.lessThanOrEqualTo(row.amountPaid)) continue;
+        const overdue = row.dueDate < now;
+        candidates.push({
+          type: overdue ? NotificationType.LOAN_PAYMENT_OVERDUE : NotificationType.LOAN_PAYMENT_DUE,
+          title: overdue ? "Loan payment overdue" : "Loan payment due soon",
+          message: `${row.loan.lenderName}: installment #${row.installmentNumber} of ৳${totalDue.toFixed(2)} ${
+            overdue ? "was due" : "is due"
+          } on ${row.dueDate.toDateString()}.`,
+        });
+      }
+    }
+
     if (settings.notifyMonthlyReport && now.getDate() <= 3) {
       const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
       candidates.push({

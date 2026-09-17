@@ -20,6 +20,7 @@ const notificationFields: { key: keyof UpdateUserProfileInput; label: string }[]
   { key: "notifySubscriptionReminder", label: "Subscription reminders" },
   { key: "notifyFinancialInsight", label: "New financial insights" },
   { key: "notifyMonthlyReport", label: "Monthly report available" },
+  { key: "notifyLoanPaymentReminder", label: "Loan payment due" },
 ];
 
 export default function SettingsPage() {
@@ -42,6 +43,7 @@ export default function SettingsPage() {
         notifySubscriptionReminder: me.settings.notifySubscriptionReminder,
         notifyFinancialInsight: me.settings.notifyFinancialInsight,
         notifyMonthlyReport: me.settings.notifyMonthlyReport,
+        notifyLoanPaymentReminder: me.settings.notifyLoanPaymentReminder,
       });
     }
   }, [me, reset]);

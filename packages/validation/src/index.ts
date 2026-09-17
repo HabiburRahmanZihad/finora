@@ -13,3 +13,4 @@ export * from "./what-if.js";
 export * from "./subscription.js";
 export * from "./recurring-transaction.js";
 export * from "./export.js";
+export * from "./loan.js";

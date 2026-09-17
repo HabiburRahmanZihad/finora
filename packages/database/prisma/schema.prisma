@@ -48,6 +48,9 @@ model User {
   notifications         Notification[]
   receipts              Receipt[]
   financialInsights     FinancialInsight[]
+  loans                 Loan[]
+  loanRepaymentSchedules LoanRepaymentSchedule[]
+  loanPayments          LoanPayment[]
 
   @@map("user")
 }
@@ -137,6 +140,7 @@ model UserSettings {
   notifySubscriptionReminder Boolean @default(true)
   notifyFinancialInsight  Boolean @default(true)
   notifyMonthlyReport     Boolean @default(true)
+  notifyLoanPaymentReminder Boolean @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -281,6 +285,10 @@ model Transaction {
   isRecurring          Boolean @default(false)
   recurringTransactionId String?
   recurringTransaction  RecurringTransaction? @relation(fields: [recurringTransactionId], references: [id], onDelete: SetNull)
+
+  isLoanPayment Boolean      @default(false)
+  loanPaymentId String?      @unique
+  loanPayment   LoanPayment? @relation(fields: [loanPaymentId], references: [id], onDelete: SetNull)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -449,6 +457,8 @@ enum NotificationType {
   SUBSCRIPTION_REMINDER
   FINANCIAL_INSIGHT
   MONTHLY_REPORT_AVAILABLE
+  LOAN_PAYMENT_DUE
+  LOAN_PAYMENT_OVERDUE
 }
 
 model Notification {
@@ -523,4 +533,145 @@ model RequestLog {
   @@index([createdAt])
   @@index([path])
   @@map("request_logs")
+}
+
+// =========================================================================
+// Loans & Repayments — money the user has borrowed from a named lender,
+// with an auto-generated amortization schedule and payment ledger.
+// =========================================================================
+
+enum LoanType {
+  PERSONAL
+  BANK
+  CREDIT_CARD
+  FRIEND_FAMILY
+  MORTGAGE
+  VEHICLE
+  STUDENT
+  BUSINESS
+  OTHER
+}
+
+enum LoanInterestType {
+  PERCENTAGE
+  FIXED
+}
+
+enum LoanInterestFrequency {
+  ONE_TIME
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+
+enum LoanRepaymentFrequency {
+  ONE_TIME
+  DAILY
+  WEEKLY
+  BI_WEEKLY
+  MONTHLY
+  QUARTERLY
+  YEARLY
+  CUSTOM
+}
+
+enum LoanInstallmentType {
+  FIXED
+  VARIABLE
+}
+
+enum LoanStatus {
+  ACTIVE
+  CLOSED
+}
+
+model Loan {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  lenderName String
+  loanType   LoanType
+
+  principalAmount Decimal  @db.Decimal(14, 2)
+  startDate       DateTime
+  endDate         DateTime
+
+  hasInterest       Boolean                 @default(false)
+  interestType      LoanInterestType?
+  // Percentage (e.g. 12.50) if interestType = PERCENTAGE, flat currency
+  // amount per interestFrequency period if interestType = FIXED.
+  interestValue     Decimal?                @db.Decimal(14, 2)
+  interestFrequency LoanInterestFrequency?
+
+  repaymentFrequency  LoanRepaymentFrequency
+  customRepaymentDays Int? // only used when repaymentFrequency = CUSTOM
+  installmentType     LoanInstallmentType
+
+  totalInstallments Int
+  status            LoanStatus @default(ACTIVE)
+  note              String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  schedule LoanRepaymentSchedule[]
+  payments LoanPayment[]
+
+  @@index([userId])
+  @@index([userId, status])
+  @@map("loans")
+}
+
+/// The planned installments for a loan, generated up front by the
+/// amortization engine. `amountPaid` accumulates as LoanPayments are
+/// recorded against a row (partial payment support).
+model LoanRepaymentSchedule {
+  id     String @id @default(cuid())
+  loanId String
+  loan   Loan   @relation(fields: [loanId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  installmentNumber Int
+  dueDate           DateTime
+
+  principalComponent Decimal @db.Decimal(14, 2)
+  interestComponent  Decimal @db.Decimal(14, 2)
+  totalDue           Decimal @db.Decimal(14, 2)
+  amountPaid         Decimal @default(0) @db.Decimal(14, 2)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  payments LoanPayment[]
+
+  @@unique([loanId, installmentNumber])
+  @@index([userId])
+  @@index([userId, dueDate])
+  @@map("loan_repayment_schedules")
+}
+
+/// Append-only payment ledger (§ payment history). Optionally linked to a
+/// real expense Transaction when the payment is posted against an account.
+model LoanPayment {
+  id         String                @id @default(cuid())
+  loanId     String
+  loan       Loan                  @relation(fields: [loanId], references: [id], onDelete: Cascade)
+  scheduleId String
+  schedule   LoanRepaymentSchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  amount   Decimal  @db.Decimal(14, 2)
+  paidDate DateTime @default(now())
+  note     String?
+
+  transaction Transaction? // set only if the payment was linked to an account
+
+  createdAt DateTime @default(now())
+
+  @@index([loanId])
+  @@index([userId])
+  @@map("loan_payments")
 }

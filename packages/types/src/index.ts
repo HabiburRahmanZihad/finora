@@ -9,6 +9,9 @@ export type BudgetStatus = "NORMAL" | "WARNING" | "EXCEEDED";
 export const BUDGET_WARNING_THRESHOLD = 0.8;
 export const BUDGET_EXCEEDED_THRESHOLD = 1.0;
 
+/** Computed at query time from LoanRepaymentSchedule.totalDue/amountPaid/dueDate vs now — not stored. */
+export type LoanPaymentStatus = "PENDING" | "PARTIALLY_PAID" | "PAID" | "OVERDUE";
+
 export type TimeFilter =
   | { preset: "today" | "this_week" | "this_month" | "this_year" }
   | { preset: "custom"; from: string; to: string };

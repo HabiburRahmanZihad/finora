@@ -21,6 +21,7 @@ import { ForecastModule } from "./forecast/forecast.module.js";
 import { HealthScoreModule } from "./health-score/health-score.module.js";
 import { SubscriptionsModule } from "./subscriptions/subscriptions.module.js";
 import { RecurringTransactionsModule } from "./recurring-transactions/recurring-transactions.module.js";
+import { LoansModule } from "./loans/loans.module.js";
 import { NotificationsModule } from "./notifications/notifications.module.js";
 import { ExportModule } from "./export/export.module.js";
 import { ReceiptsModule } from "./receipts/receipts.module.js";
@@ -50,6 +51,7 @@ import { AdminModule } from "./admin/admin.module.js";
     HealthScoreModule,
     SubscriptionsModule,
     RecurringTransactionsModule,
+    LoansModule,
     NotificationsModule,
     ExportModule,
     ReceiptsModule,
