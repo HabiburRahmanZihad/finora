@@ -3,6 +3,7 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { jwt, admin } from "better-auth/plugins";
 import { expo } from "@better-auth/expo";
 import { prisma } from "@finora/database";
+import { sendPasswordResetEmail } from "./email";
 
 const googleConfigured = Boolean(
   process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET,
@@ -18,9 +19,7 @@ export const auth = betterAuth({
     requireEmailVerification: false,
     minPasswordLength: 8,
     sendResetPassword: async ({ user, url }) => {
-      // TODO: wire up a real email provider (Resend/SMTP) before production.
-      // For now the reset link is logged so the flow is testable locally.
-      console.log(`[finora] Password reset link for ${user.email}: ${url}`);
+      await sendPasswordResetEmail(user.email, url);
     },
   },
 

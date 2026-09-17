@@ -409,8 +409,12 @@ below is still a manual, one-time click regardless of the file.
 6. **Environment variables** (Project → Settings → Environment Variables, Production scope):
    `DATABASE_URL`, `BETTER_AUTH_SECRET` (generate a fresh one, don't reuse the dev value),
    `BETTER_AUTH_URL` (your Vercel URL — you may need to deploy once first to learn it, then
-   redeploy after setting this), `NEXT_PUBLIC_API_URL` (the Render URL from step 2), and
-   optionally `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET`. See `apps/client/.env.production.example`.
+   redeploy after setting this), `NEXT_PUBLIC_API_URL` (the Render URL from step 2),
+   `SMTP_HOST`/`SMTP_PORT`/`SMTP_USER`/`SMTP_PASS`/`EMAIL_FROM` (powers password-reset
+   emails — without these the reset link only reaches the Render server logs, which users
+   can't see; a Gmail address + [app password](https://myaccount.google.com/apppasswords)
+   works fine), and optionally `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET`. See
+   `apps/client/.env.production.example`.
 7. Deploy. Once you have the final Vercel URL, make sure `BETTER_AUTH_URL` (client) and
    `WEB_APP_URL`/`BETTER_AUTH_URL` (server, on Render) all match it exactly, then redeploy
    both if you had to change anything.
@@ -463,9 +467,8 @@ Every phase in the spec's §42 development plan, plus work that came after it:
 
 **Still ahead**: the rest of the mobile app's screens (transactions, budgets, goals, accounts,
 subscriptions, recurring, reports, analytics, insights, notifications, settings — tracked
-incrementally), an Android EAS build, AI-based intelligence (v1 is deliberately SQL/statistics/
-rules only, per spec §44), and a real transactional email provider (password reset currently
-just logs the link to the API console — see `apps/client/src/lib/auth.ts`).
+incrementally), an Android EAS build, and AI-based intelligence (v1 is deliberately
+SQL/statistics/rules only, per spec §44).
 
 ## Troubleshooting
 
